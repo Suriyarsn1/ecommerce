@@ -8,10 +8,13 @@ const dotenv =require ('dotenv');
 
 dotenv.config();
 
-
+const corseOptions={
+    origin:process.env.CLIENT_URL,
+    methods:"GET,PATCH,PUT,DELETE,POST,HEAD,DELETE"
+}
 
 app.use(express.json());
-app.use(cors())
+app.use(cors(corseOptions))
 app.use('/productlist/uploads',express.static(path.join(__dirname,'/productlist/uploads')))
 
 
