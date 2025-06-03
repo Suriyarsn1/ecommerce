@@ -20,7 +20,7 @@ function AdminOrders() {
   const fetchOrders = async () => {
     setoderLoading(true);
     try {
-      const res = await axios.get("http://localhost:5000/api/fetch/admin/orders");
+      const res = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/fetch/admin/orders`);
       setOrders(res.data);
       setoderLoading(false);
     } catch (err) {
@@ -52,7 +52,7 @@ function AdminOrders() {
   const handleUpdate = async (orderId) => {
     setLoading(true);
     try {
-      await axios.put(`http://localhost:5000/api/admin/orders/update/${orderId}`, form);
+      await axios.put(`${process.env.REACT_APP_SERVER_URL}/api/admin/orders/update/${orderId}`, form);
       alert('Order updated!');
       setEditingOrder(null);
       fetchOrders();

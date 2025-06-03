@@ -3,8 +3,7 @@ import { useContext} from 'react'
 import { UtilityContext } from '../context/menuContext'
 function HomeMenu1() {
      const {menu}=useContext(UtilityContext)
- console.log(menu)
-
+     console.log(menu)
     return (<>
         <div className='bg-white flex justify-center gap-4 p-3'>
 

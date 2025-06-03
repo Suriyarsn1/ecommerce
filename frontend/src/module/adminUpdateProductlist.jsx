@@ -28,7 +28,7 @@ function AdminUpdateProductList() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/getproductlist/${id}`)
+        const res = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/getproductlist/${id}`)
         console.log(res.data)        
         setUpdateProduct({
           shopCardName: res.data.shopCardName || '',
@@ -101,7 +101,7 @@ function AdminUpdateProductList() {
     sizes.forEach((size) => { if (size.image) formData.append('sizesImages', size.image) })
     variants.forEach((variant) => { if (variant.image) formData.append('variantsImages', variant.image) })
     try {
-      await axios.put(`http://localhost:5000/api/update/${id}`, formData)
+      await axios.put(`${process.env.REACT_APP_SERVER_URL}/api/update/${id}`, formData)
       setUpdateStatus('Update Details Successfully')
       
     } catch (err) {

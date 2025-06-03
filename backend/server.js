@@ -10,7 +10,7 @@ dotenv.config();
 
 const corseOptions={
     origin:process.env.CLIENT_URL,
-    methods:"GET,PATCH,PUT,DELETE,POST,HEAD,DELETE"
+    methods:"GET,PATCH,PUT,DELETE,POST,HEAD"
 }
 
 app.use(express.json());

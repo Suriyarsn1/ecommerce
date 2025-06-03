@@ -23,7 +23,7 @@ const UtilityProvider = ({ children }) => {
    */
   const fetchMenu = async () => {
     try {
-      const res = await axios.post('http://localhost:5000/api/getmenu');
+      const res = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/getmenu`);
       setMenu(res.data);
     } catch (err) {
       console.log("Menu fetch failed:", err);

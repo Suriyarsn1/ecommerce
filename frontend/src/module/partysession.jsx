@@ -18,7 +18,7 @@ useEffect(()=>{
     const fetchProduct= async ()=>
 {
     try{
-        await axios.get('http://localhost:5000/api/getsproduct').then((data)=>setSProduct(data.data.Product)).catch((err)=>{console.log(err)})
+        await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/getsproduct`).then((data)=>setSProduct(data.data.Product)).catch((err)=>{console.log(err)})
     }
     catch(err)
     {

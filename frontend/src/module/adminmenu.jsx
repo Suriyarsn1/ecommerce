@@ -10,11 +10,13 @@ function AddMenu() {
   const [msg, setMsg] = useState('')
   const [menuCatFilter, setMenuCatFilter] = useState([])
 
+
   useEffect(() => { fetchMenu() }, [])
 
   const fetchMenu = async () => {
     try {
-      const res = await axios.post('http://localhost:5000/api/getmenu')
+      const res = await axios.post(`${import.meta.env.SERVER_URL}/api/getmenu`)
+      
       setMenu(res.data)
     }
     catch (err) { console.log(err) }
@@ -22,7 +24,7 @@ function AddMenu() {
 
   const handleSubmit = async () => {
     if (!menuCat || !menuTitle) { return setMsg('Must enter the MenuCat and MenuTitle') }
-    await axios.post('http://localhost:5000/api/addmenu', { menuTitle, menuCat })
+    await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/addmenu`, { menuTitle, menuCat })
       .then((data) => { setMsg(data.data.message) }).catch((err) => { setMsg(err.message) })
     setMenuCat('')
     setMenuTitle('')

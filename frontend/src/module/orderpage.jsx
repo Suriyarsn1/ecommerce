@@ -20,7 +20,7 @@ function UserOrders() {
       if (!token) return;
       setLoading(true);
       try {
-        const res = await axios.get("http://localhost:5000/api/fetch/orders", {
+        const res = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/fetch/orders`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         console.log(res.data)

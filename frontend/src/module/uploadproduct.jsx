@@ -83,7 +83,7 @@ function UploadProductlist() {
 
     try {
       // Send POST request to upload product
-      const response = await axios.post('http://localhost:5000/api/upload', formData);
+      const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/upload`, formData);
       setUploadStatus(response.data.message || "Upload successful!");
       // Optionally reset form fields
       setmainImageFile(null);

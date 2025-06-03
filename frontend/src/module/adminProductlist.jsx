@@ -12,7 +12,7 @@ function AdminProductlist() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/getproductlist");
+        const res = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/getproductlist`);
         setProducts(res.data);
       } catch (err) {
         console.error("Fetching Failed:", err);

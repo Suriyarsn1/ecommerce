@@ -14,7 +14,7 @@ function Login() {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post('http://localhost:5000/api/login', { email, password })
+    await axios.post(`${process.env.REACT_APP_SERVER_URL} /api/login`, { email, password })
       .then((data) => { console.log(data.data.checkUser.roll)
         // Store user info in localStorage
         localStorage.setItem('token', data.data.token);

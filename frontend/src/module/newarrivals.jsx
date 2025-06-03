@@ -8,7 +8,7 @@ function NewArrivals() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/collection/getlist")
+        const res = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/collection/getlist`)
         setcollections(res.data)
         console.log(res.data)
       } catch (err) {

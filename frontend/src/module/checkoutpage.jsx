@@ -81,7 +81,7 @@ function Checkout() {
   // Fetch countries on component mount
   useEffect(() => {
     const fetchCountries = async () => {
-      const res = await axios.post("http://localhost:5000/api/get/countries");
+      const res = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/get/countries`);
       setCountry(res.data);
     };
     fetchCountries();
@@ -91,29 +91,29 @@ function Checkout() {
   const handleState = async (id) => {
     const countryName = country.find(item => item.id === id);
     setForm({ ...form, country: countryName?.name || "" });
-    const res = await axios.post('http://localhost:5000/api/get/state', { id });
+    const res = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/get/state`, { id });
     setLocation({ ...location, state: res.data, district: [], city: [] });
   };
   const handleDistrict = async (statename) => {
     setForm({ ...form, state: statename });
-    const res = await axios.post('http://localhost:5000/api/get/districts', { statename });
+    const res = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/get/districts`, { statename });
     setLocation({ ...location, district: res.data, city: [] });
   };
   const handleCities = async (dname) => {
     setForm({ ...form, district: dname });
-    const res = await axios.post('http://localhost:5000/api/get/cities', { dname });
+    const res = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/get/cities`, { dname });
     setLocation({ ...location, city: res.data });
   };
   const handleVillage = async (cname) => {
     setForm({ ...form, city: cname });
-    const res = await axios.post('http://localhost:5000/api/get/village', { cname });
+    const res = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/get/village`, { cname });
     setLocation({ ...location, village: res.data });
   };
 
   // Place order handler
   const handleSubmitOrder = async () => {
     try {
-      await axios.post('http://localhost:5000/api/placeorders', {
+      await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/placeorders`, {
         userId: userId,
         cartItems: selectedcartItems,
         shippingInfo: form,

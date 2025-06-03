@@ -19,7 +19,7 @@ const CartProvider = ({ children }) => {
       setLoading(true);
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/fetch/cartitem`,
+          `${process.env.REACT_APP_SERVER_URL}/api/fetch/cartitem`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setCartProduct(res.data);
@@ -62,7 +62,7 @@ res.data.forEach(item => {
     );
     try {
       await axios.put(
-        'http://localhost:5000/api/updatecartitem',
+        `${process.env.REACT_APP_SERVER_URL}/api/updatecartitem`,
         { productId, newQty },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -85,7 +85,7 @@ res.data.forEach(item => {
     );
     try {
       await axios.put(
-        'http://localhost:5000/api/updatecartitem',
+        `${process.env.REACT_APP_SERVER_URL}/api/updatecartitem`,
         { productId, newQty },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -105,7 +105,7 @@ res.data.forEach(item => {
     );
     try {
       await axios.put(
-        'http://localhost:5000/api/updatecartitem',
+        `${process.env.REACT_APP_SERVER_URL}/api/updatecartitem`,
         { productId, newQty },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -158,7 +158,7 @@ res.data.forEach(item => {
     });
     try {
       await axios.post(
-        `http://localhost:5000/api/removecartitem`,
+        `${process.env.REACT_APP_SERVER_URL}/api/removecartitem`,
         { productId },
         { headers: { Authorization: `Bearer ${token}` } }
       );

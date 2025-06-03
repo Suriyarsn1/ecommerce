@@ -17,7 +17,7 @@ console.log(updateCollection)
   useEffect(() => {
     const fetchCollection = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/collection/getlist/${id}`)
+        const res = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/collection/getlist/${id}`)
         console.log(res.data)
         setUpdateCollection({
           collectionTypeName: res.data.collectionTypeName || '',
@@ -54,7 +54,7 @@ console.log(updateCollection)
     if (collectionImgUrl) formData.append('collectionImgUrl', collectionImgUrl)
     try {
       // Send PUT request to update the collection
-      await axios.put(`http://localhost:5000/api/collection/update/${id}`, formData)
+      await axios.put(`${process.env.REACT_APP_SERVER_URL}/api/collection/update/${id}`, formData)
       setUpdateStatus('Update Details Successfully')
       setTimeout(() => navigate('/admin/collectionlist'), 1200)
     } catch (err) {

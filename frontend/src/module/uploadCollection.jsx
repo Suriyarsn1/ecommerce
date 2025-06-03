@@ -22,7 +22,7 @@ function UploadCollectionlist() {
 
     try {
       // Send POST request to upload collection
-      const response = await axios.post('http://localhost:5000/api/collection/upload', formData);
+      const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/collection/upload`, formData);
       setUploadStatus(response.data.message || "Upload successful!");
       setcollectionFor('');
       setcollectionImgUrl('')

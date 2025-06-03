@@ -21,7 +21,7 @@ const CollectionProvider = ({ children }) => {
     const fetchCollections = async () => {
       setCollectionLoading(true);
       try {
-        const res = await axios.get("http://localhost:5000/api/collection/getlist");
+        const res = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/collection/getlist`);
         setCollections(res.data);
         setisActiveCollection(collections.filter((item) => item.collectionFor ==="681db3798321c108a5d19c0c"));
       } catch (err) {
@@ -38,7 +38,7 @@ const CollectionProvider = ({ children }) => {
     const confirmDelete = window.confirm("Are you sure you want to delete?");
     if (confirmDelete) {
       try {
-        await axios.delete(`http://localhost:5000/api/collection/deletecollection/${id}`);
+        await axios.delete(`${process.env.REACT_APP_SERVER_URL}/api/collection/deletecollection/${id}`);
         // Remove the deleted collection 
         setCollections(prev => prev.filter((p) => p._id !== id));
       } catch (err) {
