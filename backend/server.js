@@ -3,18 +3,19 @@ const app=express();
 const cors=require('cors');
 const path =require('path')
 const mongoose=require('mongoose')
-const roots=require('./roots/root')
+const roots=require('../backend/roots/root')
 const dotenv =require ('dotenv');
+const serverless = require("serverless-http"); 
 
 dotenv.config();
 
-const corseOptions={
-    origin:process.env.CLIENT_URL,
-    methods:"GET,PATCH,PUT,DELETE,POST,HEAD"
-}
+const corsOptions = {
+  origin: process.env.CLIENT_URL || "http://localhost:3000",
+  methods: "GET,PATCH,PUT,DELETE,POST,HEAD"
+};
 
 app.use(express.json());
-app.use(cors(corseOptions))
+app.use(cors(corsOptions))
 app.use('/productlist/uploads',express.static(path.join(__dirname,'/productlist/uploads')))
 
 
@@ -22,8 +23,9 @@ app.use('/productlist/uploads',express.static(path.join(__dirname,'/productlist/
     
 app.use('/api',roots)    
     
-mongoose.connect(
-    process.env.MONGODB_URL
-).then(()=>{console.log('db Connected')}).catch((err)=>{console.log('not connected',err)})
+mongoose.connect(process.env.MONGODB_URL).then(()=>console.log('MongoDB Connected')).catch(()=>console.log('MongoDB not Connected'))
+app.listen('5000',()=>console.log('Serever Strated'))
 
-app.listen(5000,()=>console.log(`Server has started`))
+
+
+module.exports.handler = serverless(app);

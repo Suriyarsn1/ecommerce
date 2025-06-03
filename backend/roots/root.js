@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 
-app = express()
+
 const { addProducts, getProducts,getProductsWithid,updateProductsWithid,deleteProductsWithid} = require('../controller/productController')
 const {register,login}=require('../controller/authController')
 const {createMenu,getMenu,addSubMenu,deleteMenu}=require('../controller/menuController')
