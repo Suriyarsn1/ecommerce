@@ -83,6 +83,9 @@ filterProducts()
                     {selectedProducts && selectedProducts.map((item, idx) => (
                         <div key={item._id || idx} className="relative m-2 flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
                             <a className="relative mx-3 mt-3 flex h-48 sm:h-60 overflow-hidden rounded-xl" href="#">
+                                <span className="absolute p-2 bg-red-500 top-3 left-3 border rounded-lg text-xs font-semibold text-white shadow">
+                                {item.shopCardType}
+                                </span>
                                 <img className="object-cover w-full h-full" src={item.shopCardImgUrl} alt={item.shopCardName} />
                                 <span className="absolute top-0 left-0 m-2 rounded-full bg-black px-2 text-center text-xs font-medium text-white">25% OFF</span>
                             </a>

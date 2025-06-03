@@ -29,7 +29,7 @@ mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('db Connected'))
   .catch((err) => console.log('not connected', err));
 
-// app.listen('5000')
+//  app.listen('5000')
 // Do NOT call app.listen()
 
 module.exports = app;

@@ -15,8 +15,8 @@ function AddMenu() {
 
   const fetchMenu = async () => {
     try {
-      const res = await axios.post(`${import.meta.env.SERVER_URL}/api/getmenu`)
-      
+      const res = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/getmenu`)
+      console.log(menu)
       setMenu(res.data)
     }
     catch (err) { console.log(err) }
@@ -37,13 +37,13 @@ function AddMenu() {
 
   const handleSubmitSubmenu = async () => {
     if (!subMcatId || !subMenuTitle) { return setMsg('Must Select main menu and Write Submenu ') }
-    await axios.post(`http://localhost:5000/api/addsubmenu/${subMcatId}`, { subMenuTitle })
+    await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/addsubmenu/${subMcatId}`, { subMenuTitle })
       .then((data) => { setMsg(data.data.message) }).catch((err) => { setMsg(err.message) })
     setSubMenuTitle('')
     fetchMenu()
   }
   const handleDelete = async (id) => {
-    await axios.delete(`http://localhost:5000/api/deletemenu/${id}`)
+    await axios.delete(`${process.env.REACT_APP_SERVER_URL}/api/deletemenu/${id}`)
     fetchMenu()
   }
 

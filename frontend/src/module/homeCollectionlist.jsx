@@ -27,16 +27,13 @@ function handleProducts(productId){
           >
             <img
               src={item.collectionImgUrl}
-              alt={item.collectionTypeName}
+              alt={item.collectionName}
               className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-sky-900 via-gray-300/10" />
             <h3 className="z-10 mt-3 text-2xl sm:text-3xl font-bold text-black">
-              {item.collectionTypeName}
+              {item.collectionName}
             </h3>
-            <div className="z-10 gap-y-1 overflow-hidden text-sm leading-6 text-gray-700">
-              {item._id}
-            </div>
           </article>
         ))}
       </div>

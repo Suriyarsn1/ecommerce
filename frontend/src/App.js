@@ -36,6 +36,7 @@ import AdminUpdateCollectionList from './module/adminupdatecollection';
 
 // Styles
 import './App.css';
+import NewArrivals from './module/newarrivals';
 
 function App() {
   return (
@@ -60,6 +61,7 @@ function App() {
                   <Route path='/homemenu2' element={<HomeMenu2 />} />
                   <Route path='/productlist/:id' element={<ProductList />} />
                   <Route path='/collectionlist' element={<CollectionList />} />
+                  <Route path='/new/arrivals' element={<NewArrivals />} />
 
                   {/* Admin Routes */}
                   <Route path='/admin/home' element={<Admin />} />

@@ -3,7 +3,7 @@ import { UtilityContext } from "../context/menuContext";
 import axios from 'axios';
 
 function UploadCollectionlist() {
- 
+  const [collectionName, setcollectionName] = useState('');
   const [collectionFor, setcollectionFor] = useState('');
   const [collectionImgUrl, setcollectionImgUrl] = useState(null);
   const [uploadStatus, setUploadStatus] = useState('');
@@ -18,12 +18,14 @@ function UploadCollectionlist() {
     // Prepare form data for API
     const formData = new FormData();
     formData.append('collectionFor', collectionFor);
+    formData.append('collectionName', collectionName);
     formData.append('collectionImgUrl', collectionImgUrl);
 
     try {
       // Send POST request to upload collection
       const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/collection/upload`, formData);
       setUploadStatus(response.data.message || "Upload successful!");
+      setcollectionName('')
       setcollectionFor('');
       setcollectionImgUrl('')
       setcollectionImgUrl(null);
@@ -42,6 +44,16 @@ function UploadCollectionlist() {
       
         <form onSubmit={handlesubmit} className="flex flex-col gap-4">
           {/* Collection For dropdown */}
+           <div>
+            <label htmlFor="cat" className="block mb-1 font-medium">Collection Name:</label>
+           <input 
+           type='text'
+           className="w-full p-2 border border-gray-300 rounded-lg"
+           value={collectionName}
+           onChange={(e)=>setcollectionName(e.target.value)}
+           ></input>
+          </div>
+
           <div>
             <label htmlFor="cat" className="block mb-1 font-medium">Collection For:</label>
             <select

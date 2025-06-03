@@ -8,8 +8,9 @@ import Profileicon from '../Assets/icons/user.png';
 import Carticon from '../Assets/icons/cart.png';
 import { Authcontext } from '../context/authContexts';
 
+
 function Navbar() {
-  const { user, Logout, userId } = useContext(Authcontext);
+  const { user, Logout,token } = useContext(Authcontext);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -62,13 +63,13 @@ function Navbar() {
         {/* Site Title */}
         <div className="flex-1 flex justify-center">
           <span className="title_name text-lg sm:text-2xl md:text-3xl font-extrabold tracking-wide text-blue-500 drop-shadow-lg transition-colors duration-300 hover:text-blue-700">
-            Fashion Clothos
+            Fashion Cloths 
           </span>
         </div>
 
         {/* User/Cart/Profile */}
         <div className="flex items-center gap-3 mt-3 sm:mt-0">
-          {userId ? (
+          {token ? (
             <div className="flex gap-4 items-center relative" ref={dropdownRef}>
               {/* Profile Dropdown */}
               <button

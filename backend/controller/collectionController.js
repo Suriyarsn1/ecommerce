@@ -28,14 +28,14 @@ exports.getCollectionsWithid = async (req, res) => {
 
 exports.addCollections = async (req, res) => {
     // Correct destructuring
-    const {  collectionFor } = req.body;
+    const {  collectionFor,collectionName } = req.body;
     try {
         // Build the image URL
         const collectionImgUrl = `http://${req.get('host')}/productlist/uploads/${req.file.filename}`;
-        console.log(collectionImgUrl);
+        
 
         // Create and save the new collection
-        const newCollection = new Collection({ collectionFor, collectionImgUrl });
+        const newCollection = new Collection({ collectionFor, collectionImgUrl,collectionName });
         await newCollection.save();
 
         res.status(201).json({ message: 'Upload successfully', Collection: newCollection });

@@ -11,6 +11,7 @@ import Navbar from './navebar'
 import HomeMenu1 from './homemenu1'
 import HomeMenu2 from './homemenu2'
 import Footer from './footer'
+import NewArrivals from './newarrivals'
 
 
 
@@ -54,9 +55,9 @@ function Home() {
                 <h1 className="text-3xl sm:text-4xl md:text-5xl font-medium text-center mt-16 sm:mt-20 md:mt-28 mb-3">
                     New Arrivals
                 </h1>
-                {/* <div className="mt-4">
-                    <Newarrivals />
-                </div> */}
+                <div className="mt-4">
+                    <NewArrivals/>
+                </div>
             </section>
             <section className="my-6 sm:my-8 md:my-12">
                 <Offerbox />

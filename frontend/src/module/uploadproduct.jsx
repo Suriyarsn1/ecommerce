@@ -94,7 +94,7 @@ function UploadProductlist() {
       setshopCardMet('');
       setshopCardCat('');
       
-      setTimeout(() => navigate('/admin/home/upload/productlist'), 1200);
+     
     } catch (err) {
       console.log(err);
       setUploadStatus('Failed to Save');
@@ -231,7 +231,7 @@ function UploadProductlist() {
                   {/* Dynamically populate from menu context */}
                   {activeCollection &&
                     activeCollection.map((item, index) => (
-                      <option key={index} value={item._id}>{item.collectionTypeName}</option>
+                      <option key={index} value={item._id}>{item.collectionName}</option>
                     ))}
                 </select>
               </div>
@@ -425,8 +425,8 @@ function UploadProductlist() {
           )}
         </form>
         {/* Link to admin page */}
-        <a className="block mt-6 text-blue-600 underline text-center" href="/admin/home">
-          Go to Admin Page
+        <a className="block mt-6 text-blue-600 underline text-center" href="/admin/productlist">
+          Go to ProductList Page
         </a>
       </div>
       {/* Animation style for fade-in-up */}
