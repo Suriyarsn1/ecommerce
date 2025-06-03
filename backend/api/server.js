@@ -20,10 +20,13 @@ app.use('/productlist/uploads',express.static(path.join(__dirname,'/productlist/
 
 
 
-    
 app.use('/api',roots)    
-    
-mongoose.connect(process.env.MONGODB_URL).then(()=>console.log('MongoDB Connected')).catch(()=>console.log('MongoDB not Connected'))
+    console.log(process.env.MONGODB_URL)
+    console.log(process.env.CLIENT_URL)
+
+mongoose.connect(
+    process.env.MONGODB_URL  || 'mongodb+srv://suriyarsn1:Suriya.rsn1@cluster0.0yqiajj.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=Cluster0'
+).then(()=>{console.log('db Connected')}).catch((err)=>{console.log('not connected',err)})
 app.listen('5000',()=>console.log('Serever Strated'))
 
 
