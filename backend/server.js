@@ -1,11 +1,10 @@
-const express=require('express');
-const app=express();
-const cors=require('cors');
-const path =require('path')
-const mongoose=require('mongoose')
-const roots=require('./roots/root')
-const dotenv =require ('dotenv');
-const serverless = require("serverless-http"); 
+const express = require('express');
+const app = express();
+const cors = require('cors');
+const path = require('path');
+const mongoose = require('mongoose');
+const roots = require('./roots/root');
+const dotenv = require('dotenv');
 
 dotenv.config();
 
@@ -15,20 +14,18 @@ const corsOptions = {
 };
 
 app.use(express.json());
-app.use(cors(corsOptions))
-app.use('/productlist/uploads',express.static(path.join(__dirname,'/productlist/uploads')))
-
-
-
-app.use('/api',roots)  
-
-
+app.use(cors(corsOptions));
+app.use('/productlist/uploads', express.static(path.join(__dirname, '/productlist/uploads')));
+app.use('/api', roots);
 
 mongoose.connect(
-    process.env.MONGODB_URL  || 'mongodb+srv://suriyarsn1:Suriya.rsn1@cluster0.0yqiajj.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=Cluster0'
-).then(()=>{console.log('db Connected')}).catch((err)=>{console.log('not connected',err)})
-// app.listen('5000',()=>console.log('Serever Strated'))
+  process.env.MONGODB_URL || 'mongodb+srv://suriyarsn1:Suriya.rsn1@cluster0.0yqiajj.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=Cluster0'
+).then(() => {
+  console.log('db Connected');
+}).catch((err) => {
+  console.log('not connected', err);
+});
 
+// Do NOT call app.listen()
 
-
-module.exports = serverless(app);
+module.exports = app;
