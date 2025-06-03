@@ -31,7 +31,7 @@ const CollectionProvider = ({ children }) => {
       }
     };
     fetchCollections();
-  }, []);
+  }, [isActiveCollection,collections]);
 
   // Delete a collection by ID
   const handleDelete = async (id) => {

@@ -7,9 +7,13 @@ const roots = require('./roots/root');
 const dotenv = require('dotenv');
 
 dotenv.config();
-
+  console.log(process.env.CLIENT_URL)
+  const allowedOrigins = [
+  'https://ecommerce-five-iota-68.vercel.app',
+  'http://localhost:3000'
+];
 const corsOptions = {
-  origin: process.env.CLIENT_URL || "http://localhost:3000",
+  origin: allowedOrigins,
   methods: "GET,PATCH,PUT,DELETE,POST,HEAD"
 };
 app.use((req, res, next) => {
