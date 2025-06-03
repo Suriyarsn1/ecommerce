@@ -33,7 +33,7 @@ mongoose.connect(
   console.log('not connected', err);
 });
 
-app.listen('5000')
+// app.listen('5000')
 // Do NOT call app.listen()
 
 module.exports = app;
