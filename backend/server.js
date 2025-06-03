@@ -3,7 +3,7 @@ const app=express();
 const cors=require('cors');
 const path =require('path')
 const mongoose=require('mongoose')
-const roots=require('../roots/root')
+const roots=require('./roots/root')
 const dotenv =require ('dotenv');
 const serverless = require("serverless-http"); 
 
@@ -20,7 +20,9 @@ app.use('/productlist/uploads',express.static(path.join(__dirname,'/productlist/
 
 
 
-app.use('/api',roots)   
+app.use('/api',roots)  
+
+
 
 mongoose.connect(
     process.env.MONGODB_URL  || 'mongodb+srv://suriyarsn1:Suriya.rsn1@cluster0.0yqiajj.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=Cluster0'
