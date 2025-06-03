@@ -25,13 +25,9 @@ app.use(cors(corsOptions));
 app.use('/productlist/uploads', express.static(path.join(__dirname, '/productlist/uploads')));
 app.use('/api', roots);
 
-mongoose.connect(
-  process.env.MONGODB_URL || 'mongodb+srv://suriyanarayanan2012:suriya.rsn1@project-1.61eaw2c.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=project-1'
-).then(() => {
-  console.log('db Connected');
-}).catch((err) => {
-  console.log('not connected', err);
-});
+mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('db Connected'))
+  .catch((err) => console.log('not connected', err));
 
 // app.listen('5000')
 // Do NOT call app.listen()

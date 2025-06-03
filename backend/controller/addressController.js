@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 
 const dataDir = path.join(__dirname, '../data');
-console.log(dataDir)
+
 const countries = JSON.parse(fs.readFileSync(path.join(dataDir, 'countries.json'), 'utf8'));
 const state = JSON.parse(fs.readFileSync(path.join(dataDir, 'states.json'), 'utf8'));
 const fullData = JSON.parse(fs.readFileSync(path.join(dataDir, 'indialist.json'), 'utf8'));
