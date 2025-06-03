@@ -26,14 +26,14 @@ app.use('/productlist/uploads', express.static(path.join(__dirname, '/productlis
 app.use('/api', roots);
 
 mongoose.connect(
-  process.env.MONGODB_URL || 'mongodb+srv://suriyarsn1:Suriya.rsn1@cluster0.0yqiajj.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=Cluster0'
+  process.env.MONGODB_URL || 'mongodb+srv://suriyanarayanan2012:suriya.rsn1@project-1.61eaw2c.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=project-1'
 ).then(() => {
   console.log('db Connected');
 }).catch((err) => {
   console.log('not connected', err);
 });
 
-// app.listen('5000')
+app.listen('5000')
 // Do NOT call app.listen()
 
 module.exports = app;

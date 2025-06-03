@@ -15,21 +15,30 @@ function Register() {
 
   // Handle registration 
   const handleRegister = async (e) => {
-    e.preventDefault();
-  
-    if (password !== cpassword) {
-      setError('Passwords do not match');
-      return;
+  e.preventDefault();
+
+  if (password !== cpassword) {
+    setError('Passwords do not match');
+    return;
+  }
+
+  try {
+    await axios.post(
+      `${process.env.REACT_APP_SERVER_URL}/api/register`,
+      { email, password, username }
+    );
+    setError(null); // Clear any previous errors
+    setError('Successfully Registered');
+    setTimeout(() => navigate('/user/login'), 1000);
+  } catch (err) {
+    // Prefer backend error message if available
+    if (err.response && err.response.data && err.response.data.message) {
+      setError(err.response.data.message);
+    } else {
+      setError('Registration failed. Please try again.');
     }
-  
-    try {
-      await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/register`, { email, password, username });
-      setError('Successfully Registered');
-      setTimeout(() => navigate('/user/login'), 1000);
-    } catch (err) {
-      setError('Registration failed. Try again.');
-    }
-  };
+  }
+};
 
   return (
     

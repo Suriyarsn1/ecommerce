@@ -12,26 +12,36 @@ function Login() {
   const [msg, setMsg] = useState('');
 
   // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    await axios.post(`${process.env.REACT_APP_SERVER_URL} /api/login`, { email, password })
-      .then((data) => { console.log(data.data.checkUser.roll)
-        // Store user info in localStorage
-        localStorage.setItem('token', data.data.token);
-        localStorage.setItem('roll', JSON.stringify(data.data.checkUser.roll));
-        localStorage.setItem('user', JSON.stringify(data.data.checkUser.username));
-        localStorage.setItem('userId', data.data.checkUser.userId);
-       //Navigate based on user role
-        if (data.data.checkUser.roll !== 'admin') {
-          navigate('/');
-        } else {
-          navigate('/admin/home');
-        }
-      })
-      .catch((err) => {
-        setMsg('Invalid! Please Register');
-      });
-  };
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    const response = await axios.post(
+      `${process.env.REACT_APP_SERVER_URL}/api/login`, // Removed space in URL
+      { email, password }
+    );
+
+    const { token, user } = response.data;
+
+    // Store user info in localStorage
+    localStorage.setItem('token', token);
+    localStorage.setItem('role', user.role); // Use 'role' if that's the field
+    localStorage.setItem('username', user.username);
+    localStorage.setItem('userId', user.userId);
+
+    // Navigate based on user role
+    if (user.role !== 'admin') {
+      navigate('/');
+    } else {
+      navigate('/admin/home');
+    }
+  } catch (err) {
+    setMsg(
+      err.response?.data?.message || 'Invalid! Please Register'
+    );
+  }
+};
+
 
   return (
 
