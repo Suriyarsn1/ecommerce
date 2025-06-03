@@ -1,10 +1,10 @@
 const express=require('express');
 const fs = require('fs');
 
-const countries=JSON.parse(fs.readFileSync('../backend/data/countries.json','utf8'))
-const state=JSON.parse(fs.readFileSync('../backend/data/states.json','utf8'))
-const fullData=JSON.parse(fs.readFileSync('../backend/data/indialist.json','utf8'))
-const extDistricts=JSON.parse(fs.readFileSync('../backend/data/districts.json','utf8'))
+const countries=JSON.parse(fs.readFileSync('../data/countries.json','utf8'))
+const state=JSON.parse(fs.readFileSync('../data/states.json','utf8'))
+const fullData=JSON.parse(fs.readFileSync('../data/indialist.json','utf8'))
+const extDistricts=JSON.parse(fs.readFileSync('../data/districts.json','utf8'))
 
  const Districts=extDistricts.districts
 

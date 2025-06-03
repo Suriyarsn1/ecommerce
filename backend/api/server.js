@@ -3,7 +3,7 @@ const app=express();
 const cors=require('cors');
 const path =require('path')
 const mongoose=require('mongoose')
-const roots=require('../backend/roots/root')
+const roots=require('../roots/root')
 const dotenv =require ('dotenv');
 const serverless = require("serverless-http"); 
 
