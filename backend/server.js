@@ -25,7 +25,7 @@ app.use(cors(corsOptions));
 app.use('/productlist/uploads', express.static(path.join(__dirname, '/productlist/uploads')));
 app.use('/api', roots);
 
-mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('db Connected'))
   .catch((err) => console.log('not connected', err));
 
