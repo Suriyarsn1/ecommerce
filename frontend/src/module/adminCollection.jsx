@@ -41,10 +41,7 @@ function AdminCollectionlist() {
                   <img
                     src={c.collectionImgUrl}
                     alt={c.collectionName || 'Collection image'}
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    onError={(e) => {
-                      e.target.src = 'https://via.placeholder.com/300x350?text=No+Image';
-                    }}
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"  
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-sky-900/70 via-gray-900/10 to-transparent z-10 transition-opacity duration-500 group-hover:opacity-80"></div>
                   <div className="relative z-20">
