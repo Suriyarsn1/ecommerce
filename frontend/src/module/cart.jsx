@@ -7,7 +7,7 @@ function Cartlist() {
     // Get auth token and cart context values
     const { token } = useContext(Authcontext)
     const { cartProduct, total, isLoading, handleremove, handleChangeQty, decrementQty, incrementQty, handleChecked } = useContext(CartContext)
-
+console.log(cartProduct)
     return (
         <>
             {/* Main container with padding and flex wrap for responsiveness */}
@@ -42,7 +42,25 @@ function Cartlist() {
                                                 <a href="#" className="shrink-0 md:order-1">
                                                     <img className="h-20 w-20 dark:hidden" src={item.productId.shopCardImgUrl} alt="product" />
                                                 </a>
-
+                                                {/* Size Control */}
+                                                 <div className="flex items-center justify-between md:order-3 md:justify-end">
+                                                    <div className="flex items-center">
+                                                        <label>Size:</label>
+                                                    <select name="" id="" >
+                                                        <option>{item.size}</option>
+                                                        {item.productId.sizes&&item.productId.sizes.length>0?item.productId.sizes.map((size,idx)=>(
+                                                            <option key={idx} value={size.value}>{size.value}</option>
+                                                        )):''}
+                                                        
+                                                    </select>
+                                                    </div>
+                                                    {/* Item price */}
+                                                    <div className="text-end md:order-4 md:w-32">
+                                                        <p className="text-base font-bold text-gray-900 dark:text-white">
+                                                            ₹{item.quantity * item.productId.shopCardPrice}
+                                                        </p>
+                                                    </div>
+                                                </div>
                                                 {/* Quantity controls */}
                                                 <label htmlFor="counter-input" className="sr-only">Choose quantity:</label>
                                                 <div className="flex items-center justify-between md:order-3 md:justify-end">

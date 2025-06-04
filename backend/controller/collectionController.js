@@ -1,75 +1,98 @@
-const Collection = require('../model/productCollections.js')
+const Collection = require('../model/productCollections.js');
+const fs =require('fs')
+const path=require('path')
 
-
-
+// Get all collections
 exports.getCollections = async (req, res) => {
     try {
-        
-        const getCollection = await Collection.find()
-        res.status(200).json(getCollection)
-    }
-    catch (err) {
-        res.status(500).json({ message: 'Server connection is error', error: err.message })
-    }
-}
-
-
-
-exports.getCollectionsWithid = async (req, res) => {
-    const { id } = req.params
-    try {
-        const getCollection = await Collection.findById(id)
-        res.status(200).json(getCollection )
-    }
-    catch (err) {
-        res.status(500).json({ message: 'Server connection is error', error: err.message })
-    }
-}
-
-exports.addCollections = async (req, res) => {
-    // Correct destructuring
-    const {  collectionFor,collectionName } = req.body;
-    try {
-        // Build the image URL
-        const collectionImgUrl = `http://${req.get('host')}/productlist/uploads/${req.file.filename}`;
-        
-
-        // Create and save the new collection
-        const newCollection = new Collection({ collectionFor, collectionImgUrl,collectionName });
-        await newCollection.save();
-
-        res.status(201).json({ message: 'Upload successfully', Collection: newCollection });
+        const collections = await Collection.find();
+        res.status(200).json(collections);
     } catch (err) {
-        res.status(500).json({ message: 'Failed to save Collection to DB', error: err.message });
+        res.status(500).json({ message: 'Server error', error: err.message });
     }
 };
 
+// Get collection by ID
+exports.getCollectionsWithid = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const collection = await Collection.findById(id);
+        if (!collection) {
+            return res.status(404).json({ message: 'Collection not found' });
+        }
+        res.status(200).json(collection);
+    } catch (err) {
+        res.status(500).json({ message: 'Server error', error: err.message });
+    }
+};
 
+// Add a new collection
+exports.addCollections = async (req, res) => {
+    const { collectionFor, collectionName } = req.body;
+    try {
+        if (!req.file) {
+            return res.status(400).json({ message: 'No file uploaded' });
+        }
+        const collectionImgUrl = `http://${req.get('host')}/productlist/uploads/${req.file.filename}`;
+        const newCollection = new Collection({ collectionFor, collectionImgUrl, collectionName });
+        await newCollection.save();
+        res.status(201).json({ message: 'Uploaded successfully', collection: newCollection });
+    } catch (err) {
+        res.status(500).json({ message: 'Failed to save collection to DB', error: err.message });
+    }
+};
+
+// Update collection by ID
 exports.updateCollectionsWithid = async (req, res) => {
-    const { id } = req.params
-    const newData = { collectionTypeName, collectionFor}  = req.body
-    console.log(newData)
-    if(req.body.collectionImgUrl){
-    const collectionImgUrl =`http://${req.get('host')}/productlist/uploads/${req.file.filename}`
-    newData.collectionImgUrl=collectionImgUrl }
-    try {
-        const newCollection = await Collection.findByIdAndUpdate(id, newData,{ new: true })
-        if (!newCollection) { return res.status(400).json({ Message: 'Data not Found', error: err.message }) }
-        res.status(200).json({ Message: 'Data Updated Sucessfully', Collection: newCollection })
+    const { id } = req.params;
+    // Copy all fields from req.body
+    const newData = { ...req.body };
+    // Update image URL if file is uploaded
+    if (req.file) {
+        newData.collectionImgUrl = `http://${req.get('host')}/productlist/uploads/${req.file.filename}`;
     }
-    catch (err) { res.status(404).json({ Message: 'Cannot Fetch DataBase', error: err.message }) }
+    try {
+        const updatedCollection = await Collection.findByIdAndUpdate(id, newData, { new: true });
+        if (!updatedCollection) {
+            return res.status(404).json({ message: 'Collection not found' });
+        }
+        res.status(200).json({ message: 'Data updated successfully', collection: updatedCollection });
+    } catch (err) {
+        res.status(500).json({ message: 'Failed to update collection', error: err.message });
+    }
+};
 
-}
-
-
-
+// Delete collection by ID
 exports.deleteCollectionsWithid = async (req, res) => {
-    const { id } = req.params
+    const { id } = req.params;
     try {
-        const newCollection = await Collection.findByIdAndDelete(id)
-        if (!newCollection) { return res.status(400).json({ Message: 'Data not Found', error: err.message }) }
-        res.status(200).json({ Message: ' Deleted Sucessfully', Collection: newCollection })
-    }
-    catch (err) { res.status(404).json({ Message: 'Cannot Fetch DataBase', error: err.message }) }
+        // 1. Find the collection to get the image path
+        const deletedCollection = await Collection.findById(id);
+        if (!deletedCollection) {
+            return res.status(404).json({ message: 'Collection not found' });
+        }
 
-}
+        // 2. Extract the image filename from the URL
+       
+        const imageUrl = deletedCollection.collectionImgUrl;
+        let imageFileName;
+        if (imageUrl) {
+            imageFileName = imageUrl.split('/').pop();
+        }
+
+        // 3. Delete the image file if it exists
+        if (imageFileName) {
+            const imagePath = path.join(__dirname, '../productlist/uploads', imageFileName);
+            if (fs.existsSync(imagePath)) {
+                fs.unlinkSync(imagePath); // Delete the file
+            }
+        }
+
+        // 4. Delete the collection document
+        await Collection.findByIdAndDelete(id);
+
+        res.status(200).json({ message: 'Deleted successfully', collection: deletedCollection });
+    } catch (err) {
+        res.status(500).json({ message: 'Failed to delete collection', error: err.message });
+    }
+};

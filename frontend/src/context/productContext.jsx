@@ -27,13 +27,13 @@ const ProductProvider = ({ children }) => {
   
    //Add a product to the cart 
    
-  const handleAddcart = async (productId) => {
+  const handleAddcart = async (productId,qty,size) => {
   
     if (!productIds.includes(productId)) {
       setProductIds(prev => [...prev, productId]);
     }
 
-    let newQty = 1;
+    let newQty = qty;
   
     const exist = products.find((p) => p.productId === productId);
 
@@ -53,7 +53,7 @@ const ProductProvider = ({ children }) => {
       try {
         await axios.post(
           `${process.env.REACT_APP_SERVER_URL}/api/save/cartitem`,
-          { productId, newQty },
+          { productId, newQty ,size },
           { headers: { Authorization: `Bearer ${token}` } }
         );
 

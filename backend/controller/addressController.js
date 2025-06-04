@@ -1,79 +1,83 @@
-const express=require('express');
 const path = require('path');
 const fs = require('fs');
 
 const dataDir = path.join(__dirname, '../data');
 
 const countries = JSON.parse(fs.readFileSync(path.join(dataDir, 'countries.json'), 'utf8'));
-const state = JSON.parse(fs.readFileSync(path.join(dataDir, 'states.json'), 'utf8'));
+const states = JSON.parse(fs.readFileSync(path.join(dataDir, 'states.json'), 'utf8'));
 const fullData = JSON.parse(fs.readFileSync(path.join(dataDir, 'indialist.json'), 'utf8'));
 const extDistricts = JSON.parse(fs.readFileSync(path.join(dataDir, 'districts.json'), 'utf8'));
 
- const Districts=extDistricts.districts
+const districts = extDistricts.districts;
 
-
-
-
-exports.getCountries= async (req, res) => {
+// Get all countries
+exports.getCountries = async (req, res) => {
     try {
-        const country=countries.map(item=>item)
-        res.status(200).json(country)
+        res.status(200).json(countries);
+    } catch (err) {
+        res.status(500).json({ message: 'Server error', error: err.message });
     }
-    catch (err) {
-        res.status(500).json({ message: 'Server connection is error', error: err.message })
-    }
-}
-exports.getState= async (req, res) => {
-    try {
-       
-        const{id}=req.body
-       const stateList=state.filter(item=>item.countryId===id)
-     res.status(200).json(stateList)
-    }
-    catch (err) {
-        res.status(500).json({ message: 'Server connection is error', error: err.message })
-    }
-}
+};
 
-exports.getDistricts= async (req, res) => {
+// Get states by country ID (expects GET with query or POST with body)
+exports.getState = async (req, res) => {
     try {
-         
-        const{statename}=req.body
-        const districtsList=Districts.filter(item=>item.state===statename)
-     res.status(200).json(districtsList)
+        // Use req.query for GET or req.body for POST
+        const { id } = req.method === 'GET' ? req.query : req.body;
+        if (!id) {
+            return res.status(400).json({ message: 'Country ID is required' });
+        }
+        const stateList = states.filter(item => item.countryId === id);
+        res.status(200).json(stateList);
+    } catch (err) {
+        res.status(500).json({ message: 'Server error', error: err.message });
     }
-    catch (err) {
-        res.status(500).json({ message: 'Server connection is error', error: err.message })
-    }
-}
+};
 
-exports.getCities= async (req, res) => {
+// Get districts by state name (expects GET with query or POST with body)
+exports.getDistricts = async (req, res) => {
     try {
-       
-        const{ dname}=req.body 
-       const data=(fullData.map(item=>item.districts))
-     const subDistct=data.flat().filter(item=>item.district===dname)
-     const sub=subDistct.flat().map(item=>item.subDistricts)
-         res.status(200).json (sub.flat().map(item=>item))
+        const { statename } = req.method === 'GET' ? req.query : req.body;
+        if (!statename) {
+            return res.status(400).json({ message: 'State name is required' });
+        }
+        const districtsList = districts.filter(item => item.state === statename);
+        res.status(200).json(districtsList);
+    } catch (err) {
+        res.status(500).json({ message: 'Server error', error: err.message });
     }
-    catch (err) {
-        res.status(500).json({ message: 'Server connection is error', error: err.message })
-    }
-}
+};
 
-exports.getVillage= async (req, res) => {
+// Get cities (subDistricts) by district name (expects GET with query or POST with body)
+exports.getCities = async (req, res) => {
     try {
-        console.log('citiy')
-        const{ cname}=req.body 
-      
-       const data=fullData.map(item=>item.districts)
-       const subDistct=data.flat().map(item=>item.subDistricts)
-       const village=subDistct.flat().filter(item=>item.subDistrict===cname)
-       const extvillage=village.flat().map(item=>item.villages)
-      res.status(200).json(extvillage.flat().map(item=>item))
-        console.log(cname)
+        const { dname } = req.method === 'GET' ? req.query : req.body;
+        if (!dname) {
+            return res.status(400).json({ message: 'District name is required' });
+        }
+        const data = fullData.map(item => item.districts).flat();
+        const subDistricts = data.filter(item => item.district === dname);
+        const cities = subDistricts.flatMap(item => item.subDistricts || []);
+        res.status(200).json(cities);
+    } catch (err) {
+        res.status(500).json({ message: 'Server error', error: err.message });
     }
-    catch (err) {
-        res.status(500).json({ message: 'Server connection is error', error: err.message })
+};
+
+// Get villages by subDistrict (city) name (expects GET with query or POST with body)
+exports.getVillage = async (req, res) => {
+    try {
+        const { cname } = req.method === 'GET' ? req.query : req.body;
+        if (!cname) {
+            return res.status(400).json({ message: 'SubDistrict (city) name is required' });
+        }
+        const data = fullData.map(item => item.districts).flat();
+        const subDistricts = data.flatMap(item => item.subDistricts || []);
+        const villages = subDistricts.flatMap(item => 
+            item.subDistrict === cname ? item.villages || [] : []
+        );
+        res.status(200).json(villages);
+    } catch (err) {
+        res.status(500).json({ message: 'Server error', error: err.message });
     }
-}
+};

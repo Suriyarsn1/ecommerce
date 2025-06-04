@@ -45,7 +45,7 @@ router.post('/getmenu',getMenu)
 router.post('/addsubmenu/:id',addSubMenu)
 router.delete('/deletemenu/:id',deleteMenu)
 
-router.post('/collection/upload', upload.single('collectionImgUrl'), addCollections)
+router.post('/collection/upload', upload.single('file'), addCollections)
 router.get('/collection/getlist', getCollections)
 router.get('/collection/getlist/:id',getCollectionsWithid)
 router.put('/collection/update/:id', upload.single('collectionImgUrl'), updateCollectionsWithid)

@@ -37,6 +37,7 @@ import AdminUpdateCollectionList from './module/adminupdatecollection';
 // Styles
 import './App.css';
 import NewArrivals from './module/newarrivals';
+import ProductDetail from './module/selectedProductviewPage';
 
 function App() {
   return (
@@ -62,6 +63,8 @@ function App() {
                   <Route path='/productlist/:id' element={<ProductList />} />
                   <Route path='/collectionlist' element={<CollectionList />} />
                   <Route path='/new/arrivals' element={<NewArrivals />} />
+                   <Route path='/productdetails/:id' element={<ProductDetail />} />
+                  
 
                   {/* Admin Routes */}
                   <Route path='/admin/home' element={<Admin />} />

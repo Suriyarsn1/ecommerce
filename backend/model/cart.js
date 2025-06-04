@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 
 const cartItemSchema = new mongoose.Schema({
   productId: { type: mongoose.Types.ObjectId, required: true, ref: 'Product' },
+  size:String,
+  color:String,
   quantity: { type: Number, default: 1, min: 1 },
 }, { timestamps: true });
 

@@ -1,6 +1,7 @@
 const Product = require('../model/productmodel.js')
 const mongoose =require('mongoose')
-
+const fs =require('fs')
+const path=require('path')
 
 
 exports.getProducts = async (req, res) => {
@@ -206,10 +207,25 @@ exports.updateProductsWithid= async (req, res) => {
 exports.deleteProductsWithid = async (req, res) => {
   const { id } = req.params;
   try {
-    const deletedProduct = await Product.findByIdAndDelete(id);
+    const deletedProduct = await Product.findById(id);
     if (!deletedProduct) {
       return res.status(404).json({ message: 'Product not found' });
     }
+   const imgUrl=deletedProduct.shopCardImgUrl
+  let imageFileName;
+        if (imgUrl) {
+            imageFileName = imgUrl.split('/').pop();
+        }
+
+        // 3. Delete the image file if it exists
+        if (imageFileName) {
+            const imagePath = path.join(__dirname, '../productlist/uploads', imageFileName);
+            if (fs.existsSync(imagePath)) {
+                fs.unlinkSync(imagePath); // Delete the file
+            }
+        }
+             await Product.findByIdDelete(id)
+             
     res.status(200).json({ message: 'Deleted successfully', product: deletedProduct });
   } catch (err) {
     res.status(500).json({ message: 'Database error', error: err.message });

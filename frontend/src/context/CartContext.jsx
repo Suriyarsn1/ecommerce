@@ -2,18 +2,16 @@ import { useContext, createContext, useState, useEffect } from "react";
 import { Authcontext } from "./authContexts";
 import axios from "axios";
 
-// Create a context for the cart
 export const CartContext = createContext();
 
 const CartProvider = ({ children }) => {
-  // State for cart products, loading, selected items, and totals
   const [cartProduct, setCartProduct] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const { token } = useContext(Authcontext);
   const [selectedItems, setSelectedItems] = useState({});
   const [total, setTotal] = useState({});
 
-  // Fetch cart products 
+  // Fetch cart products
   useEffect(() => {
     const fetchCartProduct = async () => {
       setLoading(true);
@@ -22,14 +20,13 @@ const CartProvider = ({ children }) => {
           `${process.env.REACT_APP_SERVER_URL}/api/fetch/cartitem`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        setCartProduct(res.data);
-        // By default, select all items in the cart
+        setCartProduct(res.data.items || res.data); // Handle both {items: []} and [] responses
         const defaultSelected = {};
-res.data.forEach(item => {
-  if (item.productId && item.productId._id) {
-    defaultSelected[item.productId._id] = true;
-  }
-});
+        (res.data.items || res.data).forEach(item => {
+          if (item.productId && item.productId._id) {
+            defaultSelected[item.productId._id] = true;
+          }
+        });
         setSelectedItems(defaultSelected);
       } catch (err) {
         console.log(err);
@@ -44,11 +41,32 @@ res.data.forEach(item => {
     }
   }, [token]);
 
-
   useEffect(() => {
     calculatedTotal();
-  
   }, [selectedItems, cartProduct]);
+
+  // // Add or update cart item (by productId and size)
+  // const setCartItem = async (productId, newQty, size) => {
+  //   try {
+  //     const res = await axios.post(
+  //       `${process.env.REACT_APP_SERVER_URL}/api/set/cartitem`,
+  //       { productId, newQty, size },
+  //       { headers: { Authorization: `Bearer ${token}` } }
+  //     );
+  //     // Update frontend state to match backend response
+  //     setCartProduct(res.data.items || res.data);
+  //     // Update selected items if needed
+  //     const defaultSelected = {};
+  //     (res.data.items || res.data).forEach(item => {
+  //       if (item.productId && item.productId._id) {
+  //         defaultSelected[item.productId._id] = true;
+  //       }
+  //     });
+  //     setSelectedItems(defaultSelected);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
 
   // Change the quantity of a cart item
   const handleChangeQty = async (productId, newQty) => {
@@ -114,12 +132,12 @@ res.data.forEach(item => {
     }
   };
 
-  // Handle checkbox selection 
+  // Handle checkbox selection
   const handleChecked = (itemId, checked) => {
     setSelectedItems(prev => ({ ...prev, [itemId]: checked }));
   };
 
-  // Calculate cart totals 
+  // Calculate cart totals
   function calculatedTotal() {
     const selectionItems = cartProduct.filter(item => item.productId && selectedItems[item.productId._id]);
     let subTotal = selectionItems.reduce(
@@ -143,15 +161,14 @@ res.data.forEach(item => {
       gst,
       grandTotal,
     });
-  
   }
+
   // Remove an item from the cart
   const handleremove = async productId => {
     const updatedCart = cartProduct.filter(
       p => p.productId._id !== productId
     );
     setCartProduct(updatedCart);
-
     setSelectedItems(prev => {
       const { [productId]: _, ...rest } = prev;
       return rest;
@@ -167,7 +184,7 @@ res.data.forEach(item => {
     }
   };
 
-  // Provide all cart state 
+  // Provide all cart state and actions
   return (
     <CartContext.Provider
       value={{
@@ -182,6 +199,7 @@ res.data.forEach(item => {
         handleChecked,
         calculatedTotal,
         total,
+       
       }}
     >
       {children}

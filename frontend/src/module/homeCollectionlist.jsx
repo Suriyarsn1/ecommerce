@@ -7,8 +7,11 @@ function CollectionList() {
   const { productIds } = useContext(ProductContext);
   const { collections, isActiveCollection } = useContext(CollectionContext);
   const navigate=useNavigate()
-function handleProducts(productId){
-  navigate(`/productlist/${productId}`)
+
+
+  function handleProducts(productId){
+  
+    navigate(`/productlist/${productId}`)
 }
 
   return (
