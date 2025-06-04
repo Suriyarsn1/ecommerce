@@ -45,11 +45,15 @@ function Checkout() {
   });
   const [estimatetime, setEstimatetime] = useState('');
   const [selectedcartItems, setSelectedCartItems] = useState([]);
+  console.log(cartProduct)
+  console.log(selectedItems)
+  console.log(selectedcartItems)
   const navigate=useNavigate()
 
   // Update selected cart items and total when selection changes
   useEffect(() => {
-    const Items = cartProduct.filter(item => selectedItems[item.productId._id]);
+    const Items = cartProduct.filter(item => selectedItems[item._id]);
+    console.log(Items )
     setSelectedCartItems(Items);
     setTotalAmount({
       subTotal: total.subTotal,
@@ -185,8 +189,7 @@ function Checkout() {
                   {/* Checkbox to select item */}
                   <input
                     type="checkbox"
-                    checked={!!selectedItems[item.productId._id]}
-                    onChange={(e) => handleChecked(item.productId._id, e.target.checked)}
+                    onChange={(e) => handleChecked(item._id, e.target.checked)} 
                     className="accent-blue-500 mr-2"
                   />
                   {/* Product details and quantity controls */}
@@ -196,7 +199,7 @@ function Checkout() {
                     {/* Quantity controls */}
                     <div className="flex items-center gap-2">
                       <button
-                        onClick={() => decrementQty(item.productId._id, item.quantity - 1)}
+                        onClick={() => decrementQty(item._id, item.quantity - 1)}
                         disabled={item.quantity < 2}
                         className="h-7 w-7 rounded bg-blue-100 hover:bg-blue-200 text-blue-800 font-bold text-lg shadow transition"
                         type="button"
@@ -205,10 +208,10 @@ function Checkout() {
                         type="text"
                         className="w-10 text-center border border-gray-200 rounded"
                         value={item.quantity}
-                        onChange={(e) => handleChangeQty(item.productId._id, e.target.value)}
+                        onChange={(e) => handleChangeQty(item._id, e.target.value)}
                       />
                       <button
-                        onClick={() => incrementQty(item.productId._id, item.quantity + 1)}
+                        onClick={() => incrementQty(item._id, item.quantity + 1)}
                         className="h-7 w-7 rounded bg-blue-100 hover:bg-blue-200 text-blue-800 font-bold text-lg shadow transition"
                         type="button"
                       >+</button>
@@ -219,7 +222,7 @@ function Checkout() {
                     </div>
                     {/* Remove button */}
                     <button
-                      onClick={() => handleremove(item.productId._id)}
+                      onClick={() => handleremove(item._id)}
                       className="text-red-500 hover:underline transition"
                       type="button"
                     >

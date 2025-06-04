@@ -33,7 +33,7 @@ console.log(cartProduct)
                                             {/* Checkbox to select item */}
                                             <input
                                                 type='checkbox'
-                                                onChange={(e) => handleChecked(item.productId._id, e.target.checked)}
+                                                onChange={(e) => handleChecked(item._id, e.target.checked)}
                                             />
 
                                             {/* Product details and quantity controls */}
@@ -67,7 +67,7 @@ console.log(cartProduct)
                                                     <div className="flex items-center">
                                                         {/* Decrement quantity button */}
                                                         <button
-                                                            onClick={() => decrementQty(item.productId._id, item.quantity - 1)}
+                                                            onClick={() => decrementQty(item._id, item.quantity - 1)}
                                                             disabled={item.quantity < 2}
                                                             type="button"
                                                             className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
@@ -81,11 +81,11 @@ console.log(cartProduct)
                                                             type="text"
                                                             className="w-10 shrink-0 border-0 bg-transparent text-center text-sm font-medium text-gray-900 focus:outline-none focus:ring-0 dark:text-white"
                                                             value={item.quantity}
-                                                            onChange={(e) => handleChangeQty(item.productId._id, e.target.value)}
+                                                            onChange={(e) => handleChangeQty(item._id, e.target.value)}
                                                         />
                                                         {/* Increment quantity button */}
-                                                        <button
-                                                            onClick={() => incrementQty(item.productId._id, item.quantity + 1)}
+                                                        <button   
+                                                            onClick={() => incrementQty(item._id, item.quantity + 1)}
                                                             type="button"
                                                             className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-gray-300 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700"
                                                         >
@@ -118,7 +118,7 @@ console.log(cartProduct)
                                                         </button>
                                                         {/* Remove item button */}
                                                         <button
-                                                            onClick={() => handleremove(item.productId._id)}
+                                                            onClick={() => handleremove(item._id)}
                                                             type="button"
                                                             className="inline-flex items-center text-sm font-medium text-red-600 hover:underline dark:text-red-500"
                                                         >

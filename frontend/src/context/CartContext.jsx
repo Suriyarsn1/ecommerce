@@ -10,7 +10,7 @@ const CartProvider = ({ children }) => {
   const { token } = useContext(Authcontext);
   const [selectedItems, setSelectedItems] = useState({});
   const [total, setTotal] = useState({});
-
+ console.log(selectedItems)
   // Fetch cart products
   useEffect(() => {
     const fetchCartProduct = async () => {
@@ -20,14 +20,8 @@ const CartProvider = ({ children }) => {
           `${process.env.REACT_APP_SERVER_URL}/api/fetch/cartitem`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        setCartProduct(res.data.items || res.data); // Handle both {items: []} and [] responses
-        const defaultSelected = {};
-        (res.data.items || res.data).forEach(item => {
-          if (item.productId && item.productId._id) {
-            defaultSelected[item.productId._id] = true;
-          }
-        });
-        setSelectedItems(defaultSelected);
+        setCartProduct(res.data.items || res.data); 
+       
       } catch (err) {
         console.log(err);
       } finally {
@@ -73,7 +67,7 @@ const CartProvider = ({ children }) => {
     if (newQty < 1) return;
     setCartProduct(prev =>
       prev.map(item =>
-        item.productId._id === productId
+        item._id === productId
           ? { ...item, quantity: Number(newQty) }
           : item
       )
@@ -95,7 +89,7 @@ const CartProvider = ({ children }) => {
     setCartProduct(prev =>
       prev
         .map(item =>
-          item.productId._id === productId
+          item._id === productId
             ? { ...item, quantity: item.quantity - 1 }
             : item
         )
@@ -116,7 +110,7 @@ const CartProvider = ({ children }) => {
   const incrementQty = async (productId, newQty) => {
     setCartProduct(prev =>
       prev.map(item =>
-        item.productId._id === productId
+        item._id === productId
           ? { ...item, quantity: item.quantity + 1 }
           : item
       )
@@ -139,7 +133,7 @@ const CartProvider = ({ children }) => {
 
   // Calculate cart totals
   function calculatedTotal() {
-    const selectionItems = cartProduct.filter(item => item.productId && selectedItems[item.productId._id]);
+    const selectionItems = cartProduct.filter(item => item._id && selectedItems[item._id]);
     let subTotal = selectionItems.reduce(
       (sum, item) => sum + item.quantity * item.productId.shopCardPrice,
       0
@@ -164,9 +158,9 @@ const CartProvider = ({ children }) => {
   }
 
   // Remove an item from the cart
-  const handleremove = async productId => {
+  const handleremove = async (productId) => {
     const updatedCart = cartProduct.filter(
-      p => p.productId._id !== productId
+      p => p._id !== productId
     );
     setCartProduct(updatedCart);
     setSelectedItems(prev => {

@@ -61,7 +61,7 @@ exports.updateCartItem = async (req, res) => {
     let cart = await Cart.findOne({ user: userId });
     if (!cart) return res.status(404).json({ message: 'User cart not found' });
 
-    const exist = cart.items.find(p => p.productId.toString() === productId);
+    const exist = cart.items.find(p => p._id.toString() === productId);
     if (!exist) return res.status(404).json({ message: 'Item not found in cart' });
 
     exist.quantity = newQty;
@@ -83,7 +83,7 @@ exports.deleteCartItem = async (req, res) => {
     if (!cart) return res.status(404).json({ message: 'User cart not found' });
 
     const initialLength = cart.items.length;
-    cart.items = cart.items.filter(p => p.productId.toString() !== productId);
+    cart.items = cart.items.filter(p => p._id.toString() !== productId);
     if (cart.items.length === initialLength) {
       return res.status(404).json({ message: 'Item not found in cart' });
     }
