@@ -1,6 +1,6 @@
 const Collection = require('../model/productCollections.js');
-const fs =require('fs')
-const path=require('path')
+const cloudinary = require('cloudinary').v2;
+const streamifier = require('streamifier');
 
 // Get all collections
 exports.getCollections = async (req, res) => {
@@ -33,8 +33,28 @@ exports.addCollections = async (req, res) => {
         if (!req.file) {
             return res.status(400).json({ message: 'No file uploaded' });
         }
-        const collectionImgUrl = `http://${req.get('host')}/productlist/uploads/${req.file.filename}`;
-        const newCollection = new Collection({ collectionFor, collectionImgUrl, collectionName });
+        // === CHANGED: Upload image buffer to Cloudinary ===
+    let collectionImgUrl = null;
+    let imagePublicId = null;
+    if (req.file) {
+      const streamUpload = (req) => {
+        return new Promise((resolve, reject) => {
+          const stream = cloudinary.uploader.upload_stream(
+            { folder: 'ecommerce_collection_images' },
+            (error, result) => {
+              if (result) resolve(result);
+              else reject(error);
+            }
+          );
+          streamifier.createReadStream(req.file.buffer).pipe(stream);
+        });
+      };
+      const result = await streamUpload(req);
+      collectionImgUrl = result.secure_url;
+      imagePublicId = result.public_id;
+  
+    }
+        const newCollection = new Collection({ collectionFor, collectionImgUrl, collectionName, imagePublicId });
         await newCollection.save();
         res.status(201).json({ message: 'Uploaded successfully', collection: newCollection });
     } catch (err) {
@@ -46,13 +66,36 @@ exports.addCollections = async (req, res) => {
 exports.updateCollectionsWithid = async (req, res) => {
     const { id } = req.params;
     // Copy all fields from req.body
-    const newData = { ...req.body };
-    // Update image URL if file is uploaded
+  
+   
+
+     const updatedCollection = await Collection.findById(id);
+        if (!updatedCollection) {
+            return res.status(404).json({ message: 'Collection not found' });
+        }
+        // Handle image update if a new file is uploaded
+    let  collectionImgUrl = updatedCollection.collectionImgUrl;
+    let imagePublicId = updatedCollection.imagePublicId;
+   
     if (req.file) {
-        newData.collectionImgUrl = `http://${req.get('host')}/productlist/uploads/${req.file.filename}`;
+      if (imagePublicId) await cloudinary.uploader.destroy(imagePublicId);
+      const uploadResult = await new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: 'ecommerce_collection_images' },
+          (error, result) => (error ? reject(error) : resolve(result))
+        );
+        streamifier.createReadStream(req.file.buffer).pipe(stream);
+      });
+       collectionImgUrl = uploadResult.secure_url;
+      imagePublicId = uploadResult.public_id;
     }
+    
+   
+
     try {
-        const updatedCollection = await Collection.findByIdAndUpdate(id, newData, { new: true });
+          const newData = { ...req.body,collectionImgUrl,imagePublicId };
+
+        const updatedCollection = await Collection.findByIdAndUpdate(id, newData,{ new: true });
         if (!updatedCollection) {
             return res.status(404).json({ message: 'Collection not found' });
         }
@@ -72,21 +115,12 @@ exports.deleteCollectionsWithid = async (req, res) => {
             return res.status(404).json({ message: 'Collection not found' });
         }
 
-        // 2. Extract the image filename from the URL
-       
-        const imageUrl = deletedCollection.collectionImgUrl;
-        let imageFileName;
-        if (imageUrl) {
-            imageFileName = imageUrl.split('/').pop();
-        }
+     
+    // 2. Delete the image from Cloudinary if imagePublicId exists
+    if (deletedCollection.imagePublicId) {
+      await cloudinary.uploader.destroy(deletedCollection.imagePublicId);
+    }
 
-        // 3. Delete the image file if it exists
-        if (imageFileName) {
-            const imagePath = path.join(__dirname, '../productlist/uploads', imageFileName);
-            if (fs.existsSync(imagePath)) {
-                fs.unlinkSync(imagePath); // Delete the file
-            }
-        }
 
         // 4. Delete the collection document
         await Collection.findByIdAndDelete(id);

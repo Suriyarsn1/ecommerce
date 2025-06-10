@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState,useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { UtilityContext } from '../context/menuContext';
 
 function AdminUpdateCollectionList() {
   const { id } = useParams();
+  const {menu}=useContext(UtilityContext)
   const navigate = useNavigate();
   const [updateStatus, setUpdateStatus] = useState('');
   const [collectionImgUrl, setCollectionImgUrl] = useState(null);
@@ -100,16 +102,16 @@ function AdminUpdateCollectionList() {
             <label htmlFor="collectionFor" className="block mb-1 font-medium">Collection For:</label>
             <select
               id="collectionFor"
-              name="collectionFor"
+              name='collectionFor'
               value={updateCollection.collectionFor}
-              onChange={handleChange}
+              onChange={(e) => handleChange(e)}
               className="w-full p-2 border border-gray-300 rounded-lg"
               required
             >
-              <option value="">Select Category</option>
-              <option value="Kids">Kids</option>
-              <option value="Men">Men</option>
-              <option value="Women">Women</option>
+              <option value="">Select</option>
+              {menu.filter(item => item.menuCat === "Categeroy 2").map((item, idx) => (
+                <option key={idx} value={item._id}>{item.menuTitle}</option>
+              ))}
             </select>
           </div>
           <div>

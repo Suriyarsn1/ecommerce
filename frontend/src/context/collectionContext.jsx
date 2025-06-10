@@ -22,6 +22,7 @@ const CollectionProvider = ({ children }) => {
       setCollectionLoading(true);
       try {
         const res = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/collection/getlist`);
+        console.log(res.data)
         setCollections(res.data);
         setisActiveCollection(collections.filter((item) => item.collectionFor ==="681db3798321c108a5d19c0c"));
       } catch (err) {
